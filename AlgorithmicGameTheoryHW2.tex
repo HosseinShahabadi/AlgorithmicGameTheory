@@ -1,0 +1,255 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage{enumitem}
+\setstretch{1.3}
+\usepackage{hyperref}
+
+\title{Algorithmic Game Theory: HW2}
+\author{Hossein Shahabadi}
+\date{April 2025}
+
+\begin{document}
+
+\maketitle
+
+\section*{Exercise 1}
+
+\textbf{Question:} Suggest at least two ways to modify the Olympic badminton tournament format to reduce or eliminate the incentive for teams to intentionally lose a match.
+
+\textbf{Answer:} During the 2012 Olympic badminton tournament, some teams deliberately lost matches to get easier opponents in later rounds. This led to disqualification of eight players.
+
+Two suggestions to address this issue:
+\begin{enumerate}[label=\arabic*.]
+  \item \textbf{Use a single-elimination format:} In this structure, a loss means elimination. Thus, teams always have strong incentives to win every match. This format was used before 2012 and avoids strategic losing.
+  \item \textbf{Random draw for knockout stage:} If keeping a group stage, perform a random draw after the group phase to determine knockout stage matchups. This way, teams can’t manipulate future opponents through losing.
+\end{enumerate}
+
+These changes align incentives and encourage fair competition.
+
+\section*{Exercise 2}
+
+\textbf{Question:} Compare the eBay auction with the second-price (Vickrey) auction. Should you bid differently in these two types of auctions?
+
+\textbf{Answer:} The eBay auction is an example of an indirect mechanism, using proxy bidding where users set a maximum bid and the system automatically increases it incrementally.
+
+Despite the difference in format, both eBay auctions and second-price sealed-bid auctions function similarly in principle: the winner pays the second-highest bid.
+
+Therefore, from a strategic standpoint, bidders should behave the same in both: the weakly dominant strategy is to bid your true valuation. In practice, however, due to misunderstanding of the system, eBay bidders may act differently.
+
+\section*{Exercise 3}
+
+\textbf{Question:} Suppose there are $k$ identical items and $n > k$ bidders. Each bidder can receive at most one item. What is the analog of the second-price auction in this case? Prove that your proposed auction is DSIC.
+
+\textbf{Answer:} This scenario maps to the $k$-unit Vickrey auction (uniform-price auction), which works as follows:
+
+\begin{enumerate}[label=\arabic*.]
+  \item Collect all bids and sort them in descending order: $b_1 > b_2 > \ldots > b_n$.
+  \item The top $k$ bidders each receive one item.
+  \item Each winner pays the $(k+1)$-th highest bid.
+\end{enumerate}
+
+\textbf{Why this is DSIC (Dominant Strategy Incentive Compatible):}
+\begin{itemize}
+  \item If a winner increases their bid, the outcome doesn't change.
+  \item If they lower their bid, they might lose the item.
+  \item If a losing bidder bids lower, the outcome remains unchanged.
+  \item If a losing bidder overbids and wins, they may end up overpaying.
+\end{itemize}
+
+Hence, truthful bidding maximizes or preserves utility for all participants. Therefore, this auction mechanism is DSIC.
+
+\section*{Exercise 4}
+
+\textbf{Question:} Suppose you want to hire a contractor to perform some task, like remodeling a house. Each contractor has a private cost for performing the task. Give an analog of the Vickrey auction in which contractors report their costs and the auction chooses a contractor and a payment. Truthful reporting should be a dominant strategy in your auction and, assuming truthful bids, your auction should select the contractor with the smallest private cost.
+
+\textbf{Answer:} This setup describes a \textit{reverse auction}, also known as a \textit{procurement auction}. The analog of the Vickrey auction is as follows:
+
+\begin{enumerate}[label=\arabic*.]
+  \item Each contractor submits a sealed bid representing their private cost.
+  \item The contractor with the \textbf{lowest bid} is selected.
+  \item The selected contractor is paid an amount equal to the \textbf{second-lowest bid}.
+\end{enumerate}
+
+\textbf{Why this is DSIC (Dominant Strategy Incentive Compatible):}
+\begin{itemize}
+  \item If a contractor bids truthfully and wins, they are paid more than or equal to their cost.
+  \item If they overbid, they might lose the job to a higher-cost contractor.
+  \item If they underbid and win, they risk being paid less than their true cost, resulting in a loss.
+\end{itemize}
+
+Thus, truthful bidding is the best strategy for all contractors, and the mechanism selects the lowest-cost contractor. Therefore, this reverse Vickrey auction is DSIC.
+
+\section*{Exercise 5}
+
+\textbf{Question:} Consider the following auction. Assume we have $k$ units of a good and $n > k$ participants. Given a reserve price $R$, the auction proceeds as follows:
+
+After all participants submit their bids $b_1, b_2, \dots, b_n$, the organizer selects the top $k$ bidders (set $S$).
+
+While there exists a bidder $i \in S$ with $b_i < R/|S|$, that bidder is removed from $S$, and the condition is rechecked for the remaining set.
+
+Final allocation: If any bidders remain in $S$, each receives one unit of the good and pays $R/|S|$.
+
+\textbf{(a) Show that this allocation rule is monotone.}
+
+\textbf{Answer:} An allocation rule is monotone if increasing a bidder's bid does not reduce their chances of receiving an item. In this auction:
+
+\begin{itemize}
+  \item Increasing a bid cannot cause a bidder to drop out of the top $k$.
+  \item If a bidder is already in $S$, increasing their bid increases the likelihood that $b_i \geq R/|S|$.
+  \item Therefore, increasing a bid cannot result in exclusion from the final allocation.
+\end{itemize}
+
+Hence, the allocation rule is monotone.
+
+\textbf{(b) Consider the auction from Exercise 3. Show that if in that auction, the organizer receives at least $R$ units from the participants, then in this auction, the organizer receives exactly $R$ units.}
+
+\textbf{Answer:} In Exercise 3, the $k$-unit Vickrey auction collects total revenue $k \cdot b_{k+1}$. If this amount is at least $R$, then it means the group of top $k$ bidders are willing to pay collectively at least that much.
+
+In the current auction, we begin by selecting the top $k$ bidders. Each of them would be asked to pay $R/k$. If any of them bid less than this threshold, they are removed and the set $S$ shrinks. As $|S|$ becomes smaller, the threshold $R/|S|$ increases.
+
+This iterative removal continues until we find a subset of bidders who are each willing to pay at least $R/|S|$. The key idea is that the auction adjusts the number of winners downward to match the reserve requirement.
+
+As a result, the organizer will collect exactly $R$, because:
+\[ 
+|S| \cdot \left(\frac{R}{|S|}\right) = R 
+\]
+
+Therefore, if the Vickrey auction generates at least $R$, this auction can select a subset of high bidders to meet that exact revenue target.
+
+\section*{Exercise 6}
+
+\textbf{Question:} Consider a Vickrey auction with multiple bidders. Suppose a subset $S$ of the bidders colludes, meaning they submit coordinated false bids to maximize their collective profit. Find the necessary and sufficient conditions for the set $S$ (in terms of the bidders' private values) under which the bidders in $S$ can increase their collective profit by submitting dishonest bids.
+
+\textbf{Answer:} In a Vickrey auction, truthful bidding is a dominant strategy for individuals, but the mechanism is not group-strategyproof. A coalition $S$ can benefit from coordinated misreporting of their values only under specific conditions.
+
+Let:
+\begin{itemize}
+  \item $v_i$: true valuation of bidder $i$,
+  \item $i^* \in S$: the member of $S$ with the highest valuation,
+  \item $v_{\text{max}}^{(-S)} = \max_{j \notin S} v_j$: the highest valuation outside of $S$,
+  \item $v_{\text{2nd}}$: the second-highest valuation in the truthful auction.
+\end{itemize}
+
+\textbf{Necessary and sufficient conditions for profitable collusion:}
+\begin{enumerate}
+  \item A member of $S$ would win truthfully:
+  \[
+  v_{i^*} > v_{\text{max}}^{(-S)}
+  \]
+  \item The second-highest bid in the truthful auction comes from a member of $S$:
+  \[
+  v_{\text{max}}^{(-S)} < v_{\text{2nd}}
+  \]
+\end{enumerate}
+
+\textbf{Explanation:} The first condition guarantees that the winner would remain a member of $S$, even without collusion. The second condition ensures that a colluding bidder is responsible for the price paid in the auction. By lowering this second-highest bid, the coalition can reduce the payment made by the winner and thereby increase their collective utility. If both conditions hold, the coalition can profit through coordinated false bidding.
+
+\section*{Exercise 7}
+
+\textbf{Question:} In Myerson's theorem, show that if an allocation rule is not monotone, then it is not implementable.
+
+\textbf{Answer 1:} Myerson’s Lemma states that in single-parameter domains, an allocation rule is implementable (i.e., part of a truthful mechanism) if and only if it is monotone non-decreasing in each agent’s bid.
+
+To show that non-monotonicity implies non-implementability, assume the contrary: suppose an allocation rule $x_i(b_i)$ is not monotone for some agent $i$. That is, there exist two bids $b_i < b_i'$ such that:
+\[
+x_i(b_i') < x_i(b_i)
+\]
+
+This implies that by increasing their bid, agent $i$ decreases their allocation — which discourages them from bidding truthfully.
+
+In such a case, there exists no payment rule that can make truth-telling a dominant strategy for agent $i$. Thus, the mechanism cannot be incentive compatible.
+
+\textbf{Conclusion:} Non-monotone allocation rules cannot be implemented truthfully, which confirms that monotonicity is a necessary condition for implementability as stated by Myerson’s theorem.
+
+
+
+\textbf{Answer 2:} To prove that a non-monotone allocation rule is not implementable, we will use the "payment difference sandwich" method from Myerson’s Lemma.
+
+\textbf{Step 1: Payment Difference Sandwich.}  
+Let \( z \) and \( y \) be two bid values where \( z < y \). The payment difference sandwich states that for an arbitrary allocation rule \( x(\cdot) \):
+\[
+z(x(y) - x(z)) \leq p(y) - p(z) \leq y(x(y) - x(z))
+\]
+This inequality compares the payments for two different bids, \( z \) and \( y \), and shows that the difference in payments depends on the change in the allocation rule.
+
+\textbf{Step 2: Non-Decreasing Allocation Rule.}  
+The above inequality implies:
+\[
+z(x(y) - x(z)) \leq y(x(y) - x(z)) \Rightarrow (y - z)(x(y) - x(z)) \geq 0
+\]
+This means that for the allocation rule \( x(\cdot) \) to be implementable, it must be \textbf{non-decreasing}. In other words, if a bidder increases their bid, their allocation should either stay the same or improve, never worsen.
+
+\textbf{Step 3: Non-Monotonicity Leads to Non-Implementability.}  
+If the allocation rule is non-monotone, there exists a case where increasing a bidder’s bid results in them losing their allocation, violating the condition that increasing the bid should never result in a worse outcome. This breaks the \textbf{incentive compatibility} condition, as bidders would have no dominant strategy to bid truthfully. Therefore, non-monotone allocation rules cannot be implemented.
+
+Thus, if an allocation rule is not monotone, it is not implementable.
+
+\section*{Exercise 8}
+
+\textbf{Question:}  
+We concluded the proof of Myerson’s Lemma by giving a “proof by picture” that coupling a monotone and piecewise constant allocation rule $\mathbf{x}$ with the payment formula
+\[
+p_i(b_i, \mathbf{b}_{-i}) = \sum_{j=1}^{\ell} z_j \cdot [\text{jump in } x_i(\cdot, \mathbf{b}_{-i}) \text{ at } z_j],
+\]
+yields a DSIC mechanism. Where does the proof-by-picture break down if the piecewise constant allocation rule $\mathbf{x}$ is not monotone?
+
+\textbf{Answer:} Myerson’s Lemma relies critically on the monotonicity of the allocation rule $\mathbf{x}$. The "proof-by-picture" interpretation assumes that the allocation probability $x_i(b_i, \mathbf{b}_{-i})$ is non-decreasing in $b_i$, ensuring the payment formula
+\[
+p_i(b_i, \mathbf{b}_{-i}) = \sum_{j=1}^{\ell} z_j \cdot [\text{jump in } x_i(\cdot, \mathbf{b}_{-i}) \text{ at } z_j],
+\]
+aligns with the DSIC property. If $\mathbf{x}$ is \textbf{not monotone}, the following breakdowns occur:  
+
+\begin{enumerate}
+  \item \textbf{Negative Payments from Downward Jumps:}  
+  Monotonicity ensures all jumps in $x_i(\cdot)$ are non-negative. Without it, increasing $b_i$ might \textit{decrease} $x_i$, creating negative jumps (e.g., $0.6 \to 0.2$). These negative terms in the payment formula lead to $p_i < 0$, meaning the mechanism \textit{pays the agent}. This violates the foundational assumption that agents pay the mechanism, not vice versa.
+
+  \item \textbf{Incentive Misalignment and DSIC Failure:}  
+  DSIC requires truthful bidding to maximize utility. A non-monotone $\mathbf{x}$ allows regions where a \textit{lower bid} grants a \textit{higher allocation}. For example, an agent might reduce their bid to exploit a higher allocation probability while avoiding payment spikes. The payment rule (derived for monotone $\mathbf{x}$) fails to penalize such manipulation, breaking incentive compatibility.
+
+  \item \textbf{Collapse of the “Area Under the Curve” Interpretation:}  
+  For monotone $\mathbf{x}$, payments correspond to the area under $x_i(\cdot)$ up to $b_i$ (integrating marginal contributions). Non-monotonicity inverts this relationship: downward jumps subtract from the payment, making the interpretation nonsensical. This misaligns payments with the intended incentive structure.
+\end{enumerate}
+
+In essence, monotonicity ensures that:
+\begin{itemize}
+  \item Payments are non-negative and flow from agents to the mechanism.
+  \item Truthful bidding is optimal (DSIC).
+  \item The payment rule has a valid geometric/economic interpretation.
+\end{itemize}
+
+\pagebreak
+\textbf{Example of Violation}  
+
+Consider a single-item auction with one bidder and a non-monotone allocation rule:
+
+
+\[
+x(b) = \left\{\begin{array}{@{}lr@{}}
+    0.6, & \text{if\hspace{0.2cm}}b \in \left[0, 5\right)\\
+    0.2, & \text{if\hspace{0.2cm}}b \in \left[5, 10\right]\\
+    \end{array}
+\]
+
+
+\begin{itemize}
+  \item \textbf{Payment at $b = 10$:}  
+  \[
+  p(10) = 5 \cdot (0.2 - 0.6) = -2 \quad (\text{bidder\,receives\,\$2}).
+  \]
+  
+  \item \textbf{DSIC Violation:} For a bidder with value $v = 6$:
+  \begin{itemize}
+    \item Truthful bid ($b = 6$): Utility $= (0.2 \cdot 6) - (-2) = 3.2$.
+    \item Under-report ($b = 4$): Utility $= (0.6 \cdot 6) - 0 = 3.6$.
+  \end{itemize}
+  The bidder gains by lying, violating DSIC.
+\end{itemize}
+
+\textbf{Conclusion}  
+
+Non-monotonicity disrupts the core assumptions of Myerson’s Lemma, enabling negative payments and strategic manipulation. The example illustrates how downward jumps in $\mathbf{x}$ destroy the alignment between payments, allocations, and incentives.
+
+
+\end{document}
